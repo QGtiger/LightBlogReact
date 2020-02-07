@@ -4,8 +4,18 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import Router from './router';
+import './assest/css/global.less';
+import './mock/mock';
+import { HashRouter } from 'react-router-dom';
+import { LocaleProvider } from 'antd';
+import zh_CN from 'antd/lib/locale-provider/zh_CN';
 
-ReactDOM.render(<Router/>, document.getElementById('root'));
+ReactDOM.render(
+    <HashRouter>
+        <LocaleProvider locale={zh_CN}>
+            <Router/>
+        </LocaleProvider>
+    </HashRouter>, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

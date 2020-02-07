@@ -1,15 +1,14 @@
 import React from 'react';
-import { Link, Route, HashRouter as Router, Switch } from 'react-router-dom';
-import App from '../App';
+import { Route, Switch } from 'react-router-dom';
 import LoginView from '../views/login/login';
-import ButtonView from '../views/button/button'
+import ButtonView from '../views/button/button';
+import BackStageLayout from './BackStage/Index/index';
+import PrivateRoute from '../components/privateRoute/index'
 
 export default ()=>(
-    <Router>
-        <Switch>
-            <Route exact path="/" component={App}></Route>
-            <Route exact path="/login" component={LoginView}></Route>
-            <Route exact path="/button" component={ButtonView}></Route>
-        </Switch>
-    </Router>
+    <Switch>
+        <Route exact path="/login" component={LoginView}></Route>
+        {/* <Route exact path="/ui/button" component={ButtonView}></Route> */}
+        <PrivateRoute path="/" component={BackStageLayout}></PrivateRoute>
+    </Switch>
 )
