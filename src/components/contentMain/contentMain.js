@@ -17,8 +17,9 @@ class ContentMain extends React.Component{
         return (
             <div>
                     <Switch>
-                        <PrivateRoute path="/ui/button" component={ButtonView}/>
-                        <PrivateRoute path="/ui/icon" component={IconView}/>
+                        <PrivateRoute exact path="/ui/button" component={ButtonView}/>
+                        <PrivateRoute exact path="/ui/icon" component={IconView}/>
+                        <Redirect exact from='/' to='/ui/button'/>
                     </Switch>
             </div>
         )

@@ -9,17 +9,71 @@ class CustomMenu extends React.Component{
         super(...arguments);
 
         this.state = {
-            openKeys: ['/ui'],
-            selectKeys: ['/ui/button']
+            openKeys: [],
+            selectKeys: []
         }
     }
 
     componentDidMount() {
-        console.log(this.props)
+        console.log(Array.from(this.refs.testChildNodes.childNodes))
+        this.convert(this.refs.testChildNodes,[])
+        this.onChangeSubMenu(this.props.location.pathname);
+        this.props.history.listen((path) => {
+            this.onChangeSubMenu(path.pathname)
+        })
     }
 
     componentWillReceiveProps(nextProps){
+        //当点击面包屑导航时，侧边栏要同步响应
+        const pathname = nextProps.location.pathname;
+        // console.log(pathname)
+        if (this.props.location.pathname !== pathname) {
+            this.setState({
+                selectedKeys: [pathname],
+            })
+        }
+    }
 
+    convert(dom, arr) {
+        //将dom节点的子节点转换成数组，
+        let children = Array.from(dom.childNodes)
+        for (let i = 0; i < children.length; i++) {
+            let node = children[i]
+            if (node.nodeType === 3) {
+                arr = arr.concat(node.nodeValue.split(''))   //将字符串转换成字符串数组，后面打印时才会一个一个的打印
+            } else if (node.nodeType === 1) {
+                let val = []
+                val = this.convert(node, val)
+                arr.push({
+                    'dom': node,
+                    'val': val
+                })
+            }
+        }
+        console.log(arr)
+        return arr
+    }
+
+    onChangeSubMenu = (pathname) => {
+        const rank = pathname.split('/')
+        switch (rank.length) {
+            case 2 :  //一级目录
+                this.setState({
+                    selectKeys: [pathname]
+                })
+                break;
+            case 5 : //三级目录，要展开两个subMenu
+                this.setState({
+                    selectKeys: [pathname],
+                    openKeys: [rank.slice(0, 3).join('/'), rank.slice(0, 4).join('/')]
+                })
+                break;
+            default :
+                this.setState({
+                    selectKeys: [pathname],
+                    openKeys: [pathname.substr(0, pathname.lastIndexOf('/'))]
+                })
+        }
     }
 
     onOpenChange = (openKeys) => {
@@ -71,7 +125,6 @@ class CustomMenu extends React.Component{
     }
 
     onSelectKeys = (selectKeys) => {
-        console.log(selectKeys)
         this.setState({
             selectKeys: [selectKeys]
         })
@@ -87,6 +140,17 @@ class CustomMenu extends React.Component{
                 theme={this.props.theme ? this.props.theme : 'dark'}
                 onClick={({key})=>this.onSelectKeys(key)}
             >
+                <div
+                ref="testChildNodes">123
+                    <div className="a1">
+                        <div className="b1">123</div>
+                    </div>
+                    <div className="a2">
+                        <div className="b2">
+                            <div className="c1"></div>
+                        </div>
+                    </div>
+                </div>
                 {
                     this.props.menus && this.props.menus.map(item=>{
                         return item.subs && item.subs.length > 0 ? this.renderSubMenu(item) : this.renderMenuItem(item)

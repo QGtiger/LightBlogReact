@@ -1,5 +1,6 @@
 import { Button, Radio, Icon } from 'antd';
 import React from 'react';
+import TypingCard from '../../../../components/typingCard/index';
 
 export default class ButtonSize extends React.Component {
   state = {
@@ -12,8 +13,10 @@ export default class ButtonSize extends React.Component {
 
   render() {
     const { size } = this.state;
+    const cardContent = '这是一个Typing Card的测试'
     return (
       <div>
+        <TypingCard source={cardContent} delay={100}></TypingCard>
         <Radio.Group value={size} onChange={this.handleSizeChange}>
           <Radio.Button value="large">Large</Radio.Button>
           <Radio.Button value="default">Default</Radio.Button>
